@@ -1,32 +1,23 @@
 import allure
-from selenium import webdriver
-from page_object.base_page_pages import BasePageScooter
-from page_object.main_page_pages import MainPageScooter
-from page_object.order_page_pages import OrderPageScooter
+import pytest
+from pages.base_page_pages import BasePageScooter
+from pages.main_page_pages import MainPageScooter
+from pages.order_page_pages import OrderPageScooter
 from utils import get_random_phone_number, get_current_date, get_next_date
 
 
+@pytest.mark.usefixtures("driver")
 class TestOrderButtonMainPage:
-    driver = None
-
-    @classmethod
-    def setup_class(cls):
-        firefox_options = webdriver.FirefoxOptions()
-        # options.add_argument("--headless")
-        firefox_options.add_argument('--window-size=1280,800')
-        cls.driver = webdriver.Firefox(options=firefox_options)
-
     @allure.title(
         'Проверка оформления заказа через кнопку "Заказать" на главной странице: с текущей датой')
     @allure.description(
         'На странице найти и нажать кнопку "Заказать", заполнить весь флоу позитивного сценария и проверить, что "Заказ оформлен"')
-    def test_order_button_main_page_current_date_user_flow_positive(self):
-        click_button_order = MainPageScooter(self.driver)
+    def test_order_button_main_page_current_date_user_flow_positive(self, driver):
+        click_button_order = MainPageScooter(driver)
         click_button_order.main_page()
         click_button_order.scroll_button_order()
         click_button_order.click_button_order()
-
-        new_order = OrderPageScooter(self.driver)
+        new_order = OrderPageScooter(driver)
         new_order.filling_form_one(
             name='Олег',
             surname='Олегович',
@@ -47,12 +38,12 @@ class TestOrderButtonMainPage:
         'Проверка оформления заказа через кнопку "Заказать" на главной странице: со следующей датой')
     @allure.description(
         'На странице найти и нажать кнопку "Заказать", заполнить весь флоу позитивного сценария и проверить, что "Заказ оформлен"')
-    def test_order_button_main_page_next_date_user_flow_positive(self):
-        click_button_order = MainPageScooter(self.driver)
+    def test_order_button_main_page_next_date_user_flow_positive(self, driver):
+        click_button_order = MainPageScooter(driver)
         click_button_order.main_page()
         click_button_order.scroll_button_order()
         click_button_order.click_button_order()
-        new_order = OrderPageScooter(self.driver)
+        new_order = OrderPageScooter(driver)
         new_order.filling_form_one(
             name='олег',
             surname='олегович',
@@ -70,32 +61,18 @@ class TestOrderButtonMainPage:
         assert new_order_title == 'Заказ оформлен'
 
 
-    @classmethod
-    def teardown_class(cls):
-        # Закрой браузер
-        cls.driver.quit()
-
-
+@pytest.mark.usefixtures("driver")
 class TestOrderButtonBasePage:
-    driver = None
-
-    @classmethod
-    def setup_class(cls):
-        firefox_options = webdriver.FirefoxOptions()
-        # options.add_argument("--headless")
-        firefox_options.add_argument('--window-size=1280,800')
-        cls.driver = webdriver.Firefox(options=firefox_options)
-
     @allure.title(
         'Проверка оформления заказа через кнопку "Заказать" в header: со текущей датой')
     @allure.description(
         'В header найти и нажать кнопку "Заказать", заполнить весь флоу позитивного сценария и проверить, что "Заказ оформлен"')
-    def test_order_button_base_page_current_date_user_flow_positive(self):
-        open_main_page = MainPageScooter(self.driver)
+    def test_order_button_base_page_current_date_user_flow_positive(self, driver):
+        open_main_page = MainPageScooter(driver)
         open_main_page.main_page()
-        click_button_order = BasePageScooter(self.driver)
+        click_button_order = BasePageScooter(driver)
         click_button_order.click_button_order_header()
-        new_order = OrderPageScooter(self.driver)
+        new_order = OrderPageScooter(driver)
         new_order.filling_form_one(
             name='Олег',
             surname='Олегович',
@@ -116,12 +93,12 @@ class TestOrderButtonBasePage:
         'Проверка оформления заказа через кнопку "Заказать" в header: со следующей датой')
     @allure.description(
         'В header найти и нажать кнопку "Заказать", заполнить весь флоу позитивного сценария и проверить, что "Заказ оформлен"')
-    def test_order_button_base_page_next_date_user_flow_positive(self):
-        open_main_page = MainPageScooter(self.driver)
+    def test_order_button_base_page_next_date_user_flow_positive(self, driver):
+        open_main_page = MainPageScooter(driver)
         open_main_page.main_page()
-        click_button_order = BasePageScooter(self.driver)
+        click_button_order = BasePageScooter(driver)
         click_button_order.click_button_order_header()
-        new_order = OrderPageScooter(self.driver)
+        new_order = OrderPageScooter(driver)
         new_order.filling_form_one(
             name='олег',
             surname='олегович',
@@ -138,9 +115,5 @@ class TestOrderButtonBasePage:
         new_order.wait_for_window_order_is_placed()
         assert new_order_title == 'Заказ оформлен'
 
-    @classmethod
-    def teardown_class(cls):
-        # Закрой браузер
-        cls.driver.quit()
 
 

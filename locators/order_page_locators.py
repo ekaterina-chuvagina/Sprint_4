@@ -8,7 +8,7 @@ class OrderPageLocators:
     FIELD_PHONE = By.XPATH, "//input[contains(@placeholder, '* Телефон: на него позвонит курьер')]"
     FIELD_SUBWAY_STATION = By.XPATH, "//input[@class='select-search__input']"
     SCROLLABLE_FIELD_SUBWAY_STATION = By.XPATH, "//div[contains(@class, 'select-search__select')]/ul/li"
-    BUTTON_FORWARD = By.XPATH, "//div[contains(@class, 'Order_NextButton')]/button[contains(@class, 'Button_Button_')]"
+    BUTTON_FORWARD = By.XPATH, "//div[contains(@class, 'Order_NextButton')]/button[contains(@class, 'Button_Button_') and (text()='Далее')]"
     FORM_TWO = By.XPATH, "//div[contains(text(), 'Про аренду')]"
     FIELD_CALENDAR = By.XPATH, "//input[contains(@placeholder, '* Когда привезти самокат')]"
     CALENDAR = By.XPATH, "//div[@class= 'react-datepicker']"

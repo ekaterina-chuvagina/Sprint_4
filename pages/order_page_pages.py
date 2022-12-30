@@ -1,3 +1,5 @@
+import time
+
 import allure
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -28,18 +30,19 @@ class OrderPageScooter:
 
     def set_subway_station(self, station):
         self.driver.find_element(*OrderPageLocators.FIELD_SUBWAY_STATION).send_keys(station)
-        WebDriverWait(self.driver, 2).until(expected_conditions.visibility_of_element_located(OrderPageLocators.SCROLLABLE_FIELD_SUBWAY_STATION))
+        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(OrderPageLocators.SCROLLABLE_FIELD_SUBWAY_STATION))
         self.click_scrollable_subway_station()
 
     def click_scrollable_subway_station(self):
         self.driver.find_element(*OrderPageLocators.SCROLLABLE_FIELD_SUBWAY_STATION).click()
-        WebDriverWait(self.driver, 2).until(expected_conditions.invisibility_of_element(OrderPageLocators.SCROLLABLE_FIELD_SUBWAY_STATION))
+        WebDriverWait(self.driver, 3).until(expected_conditions.invisibility_of_element(OrderPageLocators.SCROLLABLE_FIELD_SUBWAY_STATION))
 
     def set_phone_number(self, number):
         self.driver.find_element(*OrderPageLocators.FIELD_PHONE).send_keys(number)
-        WebDriverWait(self.driver, 2).until(expected_conditions.visibility_of_element_located(OrderPageLocators.FIELD_PHONE)) #?
+        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(OrderPageLocators.FIELD_PHONE)) #?
 
     def click_button_forward(self):
+        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(OrderPageLocators.BUTTON_FORWARD))
         self.driver.find_element(*OrderPageLocators.BUTTON_FORWARD).click()
 
     @allure.step('Заполнить поля в форме "Для кого самокат?"')
@@ -76,6 +79,7 @@ class OrderPageScooter:
         self.driver.find_element(*OrderPageLocators.FIELD_COMMENT).send_keys(comment)
 
     def click_button_order(self):
+        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(OrderPageLocators.BUTTON_ORDER))
         self.driver.find_element(*OrderPageLocators.BUTTON_ORDER).click()
 
     @allure.step('Заполнить поля в форме "Про аренду"')

@@ -1,11 +1,9 @@
 import allure
 import pytest
-from selenium import webdriver
-from page_object.main_page_pages import MainPageScooter
+from pages.main_page_pages import MainPageScooter
 
-
+@pytest.mark.usefixtures("driver")
 class TestQuestionsSections:
-    driver = None
 
     sections_test_data = [
         (1, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."),
@@ -18,31 +16,18 @@ class TestQuestionsSections:
         (8, "Да, обязательно. Всем самокатов! И Москве, и Московской области.")
     ]
 
-    @classmethod
-    def setup_class(cls):
-        firefox_options = webdriver.FirefoxOptions()
-        # options.add_argument("--headless")
-        firefox_options.add_argument('--window-size=1280,800')
-        cls.driver = webdriver.Firefox(options=firefox_options)
-
     @allure.title(
         'Проверка выпадающего списка в разделе "Вопросы о важном"')
     @allure.description(
         'На главной странице найти раздел, нажать на вопросы и проверить, что текст ответов соответствующий')
     @pytest.mark.parametrize("num,text", sections_test_data)
-    def test_get_answer(self, num, text):
-        question_section = MainPageScooter(self.driver)
+    def test_get_answer(self, driver, num, text):
+        question_section = MainPageScooter(driver)
         question_section.main_page()
         question_section.scroll_to_questions_section()
         question_section.wait_for_scroll_to_questions_section()
-        # time.sleep(1)
         question_section.click_question_button(num)
         current_answer = question_section.get_current_answer_text()
         question_section.wait_for_to_get_current_answer()
         assert current_answer == text
-
-    @classmethod
-    def teardown_class(cls):
-        # Закрой браузер
-        cls.driver.quit()
 
